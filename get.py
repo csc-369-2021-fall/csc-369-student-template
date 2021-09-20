@@ -4,7 +4,7 @@ import os
 
 #os.system("cp classroom.yml .github/workflows/classroom.yml")
 
-student_repo_path="../data-301-student/"
+student_repo_path="../csc-369-student/"
 if os.path.isdir(student_repo_path):
     print("Updating %s"%student_repo_path)
     cmd = "cd %s && git pull"%student_repo_path 
@@ -13,7 +13,7 @@ if os.path.isdir(student_repo_path):
         print("Command failed:",cmd)
         exit(1)
 else:
-    cmd = "cd .. && git clone https://github.com/anderson-github-classroom-2021-summer/data-301-student.git"
+    cmd = "cd .. && git clone https://github.com/csc-369-2021-fall/csc-369-student.git"
     r = os.system(cmd)
     if r != 0:
         print("Command failed:",cmd)
