@@ -2,48 +2,16 @@
 import sys
 import os
 
-#os.system("cp classroom.yml .github/workflows/classroom.yml")
+import utils
 
-student_repo_path="../csc-369-student/"
-if os.path.isdir(student_repo_path):
-    print("Updating %s"%student_repo_path)
-    cmd = "cd %s && git pull"%student_repo_path 
-    r = os.system(cmd)
-    if r != 0:
-        print("Command failed:",cmd)
-        exit(1)
-else:
-    cmd = "cd .. && git clone https://github.com/csc-369-2021-fall/csc-369-student.git"
-    r = os.system(cmd)
-    if r != 0:
-        print("Command failed:",cmd)
-        exit(1)
+utils.get_student_repo()
 
-path = os.getcwd()
-
-identifier = "-".join(path.split("/")[-1].split("-")[:2])
+identifier = utils.get_identifier()
 print("Identifier:",identifier)
 
-subdir = None
-if "lab-" in identifier:
-    print("Auto-detected that this is a lab")
-    subdir="labs"
-elif "chapter-" in identifier:
-    print("Auto-detected that this is a chapter")
-    subdir="chapters"
-elif "tutorial-" in identifier:
-    print("Auto-detected that this is a tutorial")
-    subdir="tutorials"
-else:
-    print("Auto-detected that this is an assignment")
-    subdir="assignments"
+subdir = utils.get_subdir(identifier)
 
-if subdir != "assignments":
-    name = "".join([c[0].upper()+c[1:] for c in identifier.split("-")])
-else:
-    name = identifier.split("-")[0]
-    name = name[0].upper()+name[1:]
-print("Name:",name)
+name = utils.get_name(identifier)
 
 if subdir is not None:
     if os.path.isfile("%s.ipynb"%name):
@@ -51,7 +19,7 @@ if subdir is not None:
         exit(1)
 
     print("Copying %s*"%name)
-    cmd = "cp -Rp %s%s/%s* ."%(student_repo_path,subdir,name)
+    cmd = "cp -Rp %s%s/%s* ."%(utils.student_repo_path,subdir,name)
     r = os.system(cmd)
     if r != 0:
         print("Command failed:",cmd)

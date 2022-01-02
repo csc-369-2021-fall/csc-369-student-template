@@ -9,9 +9,9 @@ home = str(Path.home())
 
 from IPython.display import display, Markdown, Latex
 
-student_repo="csc-369-student"
+student_repo=open('student_repo.txt').read().strip()
 student_repo_path=f"{home}/{student_repo}"
-github_organization="csc-369-2021-fall"
+github_organization=open('github_organization.txt').read().strip()
 
 def get_student_repo():
     if os.path.isdir(student_repo_path):
@@ -23,7 +23,7 @@ def get_student_repo():
         else:
             print("Success")
     else:
-        cmd = f"cd .. && git clone https://github.com/{github_organization}/csc-369-student.git"
+        cmd = f"cd .. && git clone https://github.com/{github_organization}/{student_repo}.git"
         r = os.system(cmd)
         if r != 0:
             print("Command failed:",cmd)
@@ -59,11 +59,10 @@ def get_name(identifier):
     #    name = name[0].upper()+name[1:]
     return name
 
-def print_autograder_info(exercise_number):
+def print_autograder_info():
     identifier = get_identifier()
     name = get_name(identifier)
     answers = joblib.load(f"{student_repo_path}/tests/answers_{name}.joblib")
     for key in answers.keys():
-        if int(key.split("_")[-1]) == exercise_number:
-            display(Markdown(f"## Information for {key}"))
-            display(answers[key])
+        display(Markdown(f"## Information for {key}"))
+        display(answers[key])
